@@ -1,0 +1,112 @@
+LOG_DIR: 'log'
+TENSORBOARD_DIR: 'tb'
+CKPT_FREQ: 40
+RESUME_FILE: ../potr3d/checkpoint_fin/epoch_200_POTR3D_B_PtK_Aug2_0_5M.bin
+EXPORT_TRAINING_CURVES: True
+NUM_WORKERS_PER_GPU: 8
+
+MODEL:
+  NAME: 'POTR3D_B'
+  MAX_NUM_PEOPLE: 10
+  RECEPTIVE_FIELD: 81
+  NUM_JOINTS: 15
+
+  ## Params of Lifting Module
+  NUM_LAYERS: 8
+  TOKEN_DIM: 256
+  NUM_HEADS: 8
+  MLP_RATIO: 2.
+  QKV_BIAS: True
+  QK_SCALE: None
+  DROP_RATE: 0.
+  ATTN_DROP_RATE: 0.
+  DROP_PATH_RATE: 0.2
+  NORM_LAYER: None
+
+TRAIN:
+  EPOCHS: 200
+  BATCH_SIZE: 16
+  DROPOUT: 0
+  SHUFFLE: True
+  LR: 0.0001
+  LRD: 0.99
+  FLIP_AUGMENTATION: True
+  NO_EVAL: False
+  DATASET:
+    NAME: 'panoptic'
+    TYPE: 'synth'  ## One of ('gt', 'synth', 'tracked')
+    SUBTYPE: 'aug1'
+    SUBSET: 'train'
+    DATASET_ROOT: './data/panoptic'
+    DATASET_DIRNAME: 'panoptic-toolbox'
+    CAM_LIST: [[0,16], [0,30]]
+    SEQ_LIST: ['160224_haggling1', '160226_mafia2', '160224_mafia1', '160224_mafia2', '160224_ultimatum1', '160224_ultimatum2', '160226_haggling1', '160422_haggling1', '160226_mafia1', '160422_ultimatum1', '160906_pizza1']
+    MIN_CLIP_LEN: 1000
+    NUM_JOINTS: 15
+    ROOTIDX: 2
+    STRIDE: 1
+    FPS: 30
+    INVALID_VALUE: -1.
+
+TEST:
+  MAKE_CHUNK: False
+  BATCH_SIZE: 1
+  DATASET:
+    NAME: 'panoptic'
+    TYPE: 'tracked'  ## One of ('gt', 'synth', 'tracked')
+    SUBTYPE: ''
+    SUBSET: 'test'
+    DATASET_ROOT: './data/panoptic'
+    DATASET_DIRNAME: 'panoptic-toolbox'
+    TRACKED_FILE: 'data_panoptic_tracked_0.npz'
+    CAM_LIST: [[0,16], [0,30]]
+    SEQ_LIST: ['160224_haggling1', '160226_mafia2', '160224_mafia1', '160224_mafia2', '160224_ultimatum1', '160224_ultimatum2', '160226_haggling1', '160422_haggling1', '160226_mafia1', '160422_ultimatum1', '160906_pizza1']
+    MIN_CLIP_LEN: 1000
+    NUM_JOINTS: 15
+    ROOTIDX: 2
+    STRIDE: 1
+    FPS: 30
+    INVALID_VALUE: -1.
+
+VIS:
+  VIS_DIR: 'vis'
+  VID_NUM_FRAMES: 100
+  DEFAULT_NUM_SHOTS: 4
+  FIG_SIZE: 6
+  ELEV: 5.
+  AZIM: -90.
+  RADIUS_OF_3D_PLOT: 3. ## (meter)
+  BITRATE: 3000
+  FPS: 30
+  DATASET:
+    NAME: 'panoptic'
+    TYPE: 'tracked'
+    SUBTYPE: ''
+    SUBSET: 'test'
+    DATASET_ROOT: './data/panoptic'
+    DATASET_DIRNAME: 'panoptic-toolbox'
+    ROOTIDX: 2
+    INVALID_VALUE: -1
+
+AUG:
+  AUG_TYPE: 'aug4'
+  TOT_FRAMES: 1584000
+  FRAMES_PER_CLIP: 500
+  TEST_SET_RATIO: 0.
+  RADIUS_OF_3D_BALL: 140 ## (mm)
+  MIN_VALID_DEPTH: 400 ## (mm)
+  NUM_PEOPLE_CANDI: [5,4,3,2]
+  PT_LIM: 6000 ## (mm)
+  PR_LIM: 0.25 ## rotation of PR <= PR_LIM x PI
+  GPT_CANDI: [-1000., 0., 1500., 3000.] ## (mm)
+  GPR_CANDI: [-0.166666, 0., 0.166666] ## GPR_CANDI x PI
+  GPR_MARGIN: 0.05
+  PRINT_FREQ: 1000
+  DEFAULT_NOISE_LEVEL: 0.1
+  DEFAULT_NOISE_PROB: 0.2
+  SELF_OCCLUSION_NOISE_LEVEL: 0.2
+  SELF_OCCLUSION_NOISE_PROB: 0.3
+  SELF_OCCLUSION_DROPOUT_PROB: 0.05
+  INTER_OCCLUSION_NOISE_LEVEL: 1.
+  INTER_OCCLUSION_NOISE_PROB: 1.
+  INTER_OCCLUSION_DROPOUT_PROB: 0.5

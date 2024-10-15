@@ -1,0 +1,9 @@
+__pycache__/*
+*.pyc
+log/*
+vis/panoptic/*
+vis/vid3dhp/*
+log_*
+submit.sh
+slrum_log_*
+*.npz

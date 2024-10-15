@@ -1,0 +1,63 @@
+LOG_DIR: 'log'
+TENSORBOARD_DIR: 'tb'
+CKPT_FREQ: 40
+RESUME_FILE: '../potr3d/checkpoint_fin/POTR3D_B_Aug2_0_7M.bin'
+EXPORT_TRAINING_CURVES: True
+NUM_WORKERS_PER_GPU: 8
+
+MODEL:
+  NAME: 'POTR3D_B'
+  MAX_NUM_PEOPLE: 10
+  RECEPTIVE_FIELD: 81
+  NUM_JOINTS: 17
+
+  ## Params of Lifting Module
+  NUM_LAYERS: 8
+  TOKEN_DIM: 512
+  NUM_HEADS: 8
+  MLP_RATIO: 2.
+  QKV_BIAS: True
+  QK_SCALE: None
+  DROP_RATE: 0.
+  ATTN_DROP_RATE: 0.
+  DROP_PATH_RATE: 0.2
+  NORM_LAYER: None
+
+TEST:
+  MAKE_CHUNK: False
+  BATCH_SIZE: 1
+  DATASET:
+    NAME: 'mupots'
+    TYPE: 'gt'  ## One of ('gt', 'synth', 'tracked')
+    SUBTYPE: ''
+    SUBSET: 'test'
+    DATASET_ROOT: './data/mupots'
+    DATASET_DIRNAME: 'MultiPersonTestSet'
+    TRACKED_FILE: 'data_mupots_tracked_0.npz'
+    CAM_LIST: [0]
+    SEQ_LIST: ['TS1','TS2','TS3','TS4','TS5','TS6','TS7','TS8','TS9','TS10','TS11','TS12','TS13','TS14','TS15','TS16','TS17','TS18','TS19','TS20']
+    NUM_JOINTS: 17
+    ROOTIDX: 14
+    STRIDE: 1
+    FPS: 30
+    INVALID_VALUE: -1.
+
+VIS:
+  VIS_DIR: 'vis'
+  VID_NUM_FRAMES: 100
+  DEFAULT_NUM_SHOTS: 4
+  FIG_SIZE: 6
+  ELEV: 5.
+  AZIM: -90.
+  RADIUS_OF_3D_PLOT: 3. ## (meter)
+  BITRATE: 3000
+  FPS: 30
+  DATASET:
+    NAME: 'mupots'
+    TYPE: 'gt'
+    SUBTYPE: ''
+    SUBSET: 'test'
+    DATASET_ROOT: './data/mupots'
+    DATASET_DIRNAME: 'MultiPersonTestSet'
+    ROOTIDX: 14
+    INVALID_VALUE: -1
